@@ -170,21 +170,21 @@ public class JwtService {
         return Optional.empty();
     }
 
-//    public void updateRefreshToken(String email, String refreshToken) {
-//        memberRepository.findByEmail(email)
-//                .ifPresentOrElse(
-//                        member -> member.updateRefreshToken(refreshToken),
-//                        () -> log.error("해당하는 회원이 없습니다.")
-//                );
-//    }
-//
-//    public void updateAccessToken(String email, String accessToken) {
-//        memberRepository.findByEmail(email)
-//                .ifPresentOrElse(
-//                        member -> member.updateAccessToken(accessToken),
-//                        () -> log.error("해당하는 회원이 없습니다.")
-//                );
-//    }
+    public void updateRefreshToken(String email, String refreshToken) {
+        memberRepository.findByEmail(email)
+                .ifPresentOrElse(
+                        member -> member.updateRefreshToken(refreshToken),
+                        () -> log.error("해당하는 회원이 없습니다.")
+                );
+    }
+
+    public void updateAccessToken(String email, String accessToken) {
+        memberRepository.findByEmail(email)
+                .ifPresentOrElse(
+                        member -> member.updateAccessToken(accessToken),
+                        () -> log.error("해당하는 회원이 없습니다.")
+                );
+    }
 
     public boolean isTokenValid(String token) {
         try {

@@ -34,4 +34,12 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
+
+    public void updateAccessToken(String updateAccessToken) {
+        this.accessToken = updateAccessToken;
+    }
+
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
+    }
 }
