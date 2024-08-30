@@ -2,14 +2,12 @@ package com.example.demo.entity;
 
 import com.example.demo.config.BaseTime;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Entity
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class OauthUser extends BaseTime {
