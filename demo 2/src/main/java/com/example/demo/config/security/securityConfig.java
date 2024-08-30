@@ -54,18 +54,18 @@ public class securityConfig {
                 .httpBasic().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .authorizeRequests()
-                .requestMatchers().permitAll()
+                .authorizeHttpRequests()
+                .requestMatchers("").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
-                .loginPage("")
-                .successHandler()
-                .failureHandler()
-                .userInfoEndpoint().userService();
+                .loginPage("/v1/oauth/oauth2/authorization/{provider}")
+                .successHandler(oauthLoginSuccessHandler)
+                .failureHandler(oauthLoginFailureHandler)
+                .userInfoEndpoint().userService(customOauthUserService);
 
-        http.addFilterAfter();
-        http.addFilterBefore();
+        http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter());
+        http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -84,6 +84,7 @@ public class securityConfig {
         return source;
 
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
