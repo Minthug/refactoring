@@ -45,24 +45,21 @@ public class securityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors().configurationSource(configurationSource()).and()
-                .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .headers().frameOptions().disable()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .oauth2Login()
-                .loginPage("/v1/oauth/oauth2/authorization/{provider}")
-                .successHandler(oauthLoginSuccessHandler)
-                .failureHandler(oauthLoginFailureHandler)
-                .userInfoEndpoint().userService(customOauthUserService);
+                .cors(cors -> cors.configurationSource(configurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/public/**", "/v1/oauth/oauth2/authorization/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/v1/oauth/oauth2/authorization/{provider}")
+                        .successHandler(oauthLoginSuccessHandler)
+                        .failureHandler(oauthLoginFailureHandler)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOauthUserService))
+                );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter());
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
