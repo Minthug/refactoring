@@ -44,4 +44,7 @@ public class Member {
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
     }
+
+    public void updateProfileImageUrl(String imageUrl) {
+    }
 }
