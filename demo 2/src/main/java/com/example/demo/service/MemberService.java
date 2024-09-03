@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.*;
-import com.example.demo.entity.Image;
+import com.example.demo.dto.member.MemberDto;
+import com.example.demo.dto.member.MemberResponseDto;
+import com.example.demo.dto.member.MemberUpdateDto;
+import com.example.demo.dto.member.ProfileDto;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.DiaryRepository;
 import com.example.demo.repository.MemberRepository;
