@@ -71,6 +71,10 @@ public class MemberService {
             String encryptedPassword = encryptPasswordIfProvided(memberUpdateDto.getPassword());
             ImageS3 updateImage = updateProfileImage(member, memberUpdateDto.getImagesFiles());
 
+            memberRepository.save(member);
+            return MemberResponseDto.of(member);
+        } catch (Exception e) {
+            throw new RuntimeException("회원 정보 수정에 실패했습니다.");
         }
     }
 
@@ -133,5 +137,14 @@ public class MemberService {
         }
     }
 
+    private void updateMemberDetails(Member member, MemberUpdateDto memberUpdateDto, String encryptedPassword, String updatedImageUrl) {
+        member.updateMember(
+                memberUpdateDto.getNickname(),
+                memberUpdateDto.getIntroduce(),
+                encryptedPassword,
+                updatedImageUrl
+        );
+        member.updateProfileImageUrl(updatedImageUrl);
+        }
+    }
 
-}

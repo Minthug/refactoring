@@ -30,4 +30,5 @@ public abstract class BaseTime {
     public void onPreUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.config.BaseTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+public class Member extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +47,15 @@ public class Member {
     }
 
     public void updateProfileImageUrl(String imageUrl) {
+    }
+
+    public void updateMember(String nickname, String introduce, String encryptedPassword, String imageUrl) {
+        if (nickname != null && !nickname.isEmpty()) this.nickname = nickname;
+        if (introduce != null) this.introduce = introduce;
+        if (password != null && !password.isEmpty()) this.password = password;
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            this.imageUrl = imageUrl;
+        }
+        onPreUpdate();
     }
 }
