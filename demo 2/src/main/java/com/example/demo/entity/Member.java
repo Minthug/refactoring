@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -47,6 +48,7 @@ public class Member extends BaseTime {
     }
 
     public void updateProfileImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void updateMember(String nickname, String introduce, String encryptedPassword, String imageUrl) {
@@ -57,5 +59,22 @@ public class Member extends BaseTime {
             this.imageUrl = imageUrl;
         }
         onPreUpdate();
+    }
+
+    public void hashPassword(PasswordEncoder encoder) {
+        this.password = encoder.encode(this.password);
+    }
+
+    public void updateMemberType(MemberType memberType) {
+        this.memberType = memberType;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateOAuthInfo(String providerId, String provider) {
+        this.socialId = providerId;
+        this.provider = provider;
     }
 }
