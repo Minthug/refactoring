@@ -14,12 +14,11 @@ public class ImageResponseDto {
     private String originalName;
     private String imageUrl;
 
-    public ImageResponseDto toDto(Image image) {
+    public static ImageResponseDto toDto(Image image) {
         return new ImageResponseDto(
                 image.getId(),
                 image.getOriginalName(),
                 getFullImageUrl(image.getImageUrl())
-
         );
     }
 
