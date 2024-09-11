@@ -15,6 +15,6 @@ public class HeartSummaryDto {
 
     private Long totalHearts;
     private boolean isLikedByCurrentUser;
-    private List<String> recentLikerUsernames;
+    private List<String> recentLikerNicknames;
 
 }
