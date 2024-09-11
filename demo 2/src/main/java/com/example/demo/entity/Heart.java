@@ -17,6 +17,9 @@ public class Heart extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "target_id", nullable = false)
+    private Long targetId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     private Diary diary;
@@ -25,8 +28,8 @@ public class Heart extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Heart(Diary diary, Member member) {
-        this.diary = diary;
-        this.member = member;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private HeartType heartType;
+
 }
