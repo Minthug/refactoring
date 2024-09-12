@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,14 @@ public class Diary extends BaseTime {
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    public Diary(String title, String subTitle, String content, Member member, List<MultipartFile> imageFiles) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.content = content;
+        this.member = member;
+        this.images = new ArrayList<>();
+    }
+
     public void update(String title, String subTitle, String content) {
         this.title = title;
         this.subTitle = subTitle;
@@ -52,4 +61,7 @@ public class Diary extends BaseTime {
         this.comments.add(comment);
     }
 
+    public void addImages(Image image) {
+        this.images.add(image);
+    }
 }
