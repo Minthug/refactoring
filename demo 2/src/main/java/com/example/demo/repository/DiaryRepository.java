@@ -2,6 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.Diary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,5 +23,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Optional<Diary> findByIdWithMemberAndImages(@Param("id") Long id);
 
     @Query("select d from Diary d JOIN FETCH d.member m where d.id IN :ids")
-    Optional<Diary> findDiariesByWithMemberByIds(@Param("id") List<Long> ids);
+    List<Diary> findDiariesByWithMemberByIds(@Param("id") List<Long> ids);
+
+    Page<Diary> findAllByTitleContaining(String keyword, PageRequest pageRequest);
+
 }
