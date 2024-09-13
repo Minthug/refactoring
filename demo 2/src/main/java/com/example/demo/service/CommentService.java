@@ -31,8 +31,8 @@ public class CommentService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public CommentDto createComment(CommentCreateRequestDto request) {
-        Diary diary = diaryRepository.findById(request.getDiaryId())
+    public CommentDto createComment(Long diaryId, CommentCreateRequestDto request, String username) {
+        Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 일기가 존재하지 않습니다."));
 
         Member member = memberRepository.findById(request.getMemberId())

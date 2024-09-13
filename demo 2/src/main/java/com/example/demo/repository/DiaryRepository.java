@@ -25,6 +25,7 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("select d from Diary d JOIN FETCH d.member m where d.id IN :ids")
     List<Diary> findDiariesByWithMemberByIds(@Param("id") List<Long> ids);
 
-    Page<Diary> findAllByTitleContaining(String keyword, PageRequest pageRequest);
+    @Query("select d from Diary d where LOWER(d.title) like LOWER(concat('%', :keyword, '%'))")
+    Page<Diary> findAllByTitleContaining(@Param(value = "title") String keyword, Pageable pageable);
 
 }
