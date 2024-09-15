@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.utils.SortUtils;
 import com.example.demo.dto.comment.CommentCreateRequestDto;
 import com.example.demo.dto.comment.CommentDto;
+import com.example.demo.dto.comment.CommentPageResponseDto;
+import com.example.demo.dto.comment.CommentUpdateDto;
 import com.example.demo.dto.diary.DiaryCreatedRequestDto;
 import com.example.demo.dto.diary.DiaryPatchDto;
 import com.example.demo.dto.diary.DiaryResponseDto;
@@ -11,6 +14,9 @@ import com.example.demo.service.DiaryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +32,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
     private final CommentService commentService;
+    private final SortUtils sortUtils;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DiaryResponseDto> createDiary(@Valid @RequestBody DiaryCreatedRequestDto request,
@@ -88,5 +95,34 @@ public class DiaryController {
                                                          @AuthenticationPrincipal UserDetails userDetails) {
         CommentDto response = commentService.createComment(diaryId, request, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/{id}/comments")
+    public ResponseEntity<CommentPageResponseDto> getDiaryComments(@PathVariable Long diaryId,
+                                                                         @RequestParam(defaultValue = "0") Integer page,
+                                                                         @RequestParam(defaultValue = "20") Integer size,
+                                                                         @RequestParam(defaultValue = "createdAt,desc") String[] sort) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortUtils.createSortOrder(sort)));
+        CommentPageResponseDto response = commentService.getCommentForDiary(diaryId, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<CommentDto> patchComments(@PathVariable Long diaryId,
+                                                    @PathVariable Long commentId,
+                                                    @Valid @RequestBody CommentUpdateDto request,
+                                                    @AuthenticationPrincipal UserDetails userDetails) {
+        CommentDto response = commentService.updateComment(diaryId, commentId, new CommentUpdateDto(), userDetails.getUsername());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{id}/comments/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long diaryId,
+                                           @PathVariable long commentId,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        commentService.deleteComment(diaryId, commentId, userDetails.getUsername());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

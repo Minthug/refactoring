@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.config.exception.EntityNotFoundException;
+import com.example.demo.config.exception.UnauthenticatedException;
 import com.example.demo.dto.comment.CommentCreateRequestDto;
 import com.example.demo.dto.comment.CommentDto;
 import com.example.demo.dto.comment.CommentPageResponseDto;
@@ -65,26 +66,25 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDto updateComment(Long commentId, CommentUpdateDto request) {
+    public CommentDto updateComment(Long diaryId, Long commentId, CommentUpdateDto request, String username) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
 
-        if (!comment.getMember().getId().equals(request.getMemberId())) {
-            throw new IllegalArgumentException("해당 댓글을 수정할 권한이 없습니다.");
+        if (!comment.getMember().getName().equals(username)) {
+            throw new UnauthenticatedException("해당 댓글을 수정할 권한이 없습니다.");
         }
 
         comment.updateContent(request.getContent());
-        Comment updatedComment = commentRepository.save(comment);
-        return mapToDto(updatedComment);
+        return mapToDto(comment);
     }
 
     @Transactional
-    public void deleteComment(Long commentId, Long memberId) {
+    public void deleteComment(Long diaryId, Long commentId, String username) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 댓글이 존재하지 않습니다."));
 
-        if (!comment.getMember().getId().equals(memberId)) {
-            throw new IllegalArgumentException("해당 댓글을 삭제할 권한이 없습니다.");
+        if (!comment.getMember().getName().equals(username)) {
+            throw new UnauthenticatedException("해당 댓글을 삭제할 권한이 없습니다.");
         }
 
         commentRepository.delete(comment);
