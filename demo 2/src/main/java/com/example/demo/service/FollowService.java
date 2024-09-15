@@ -27,11 +27,11 @@ public class FollowService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public FollowDto follow(FollowRequestDto request) {
-        Member follower = memberRepository.findById(request.getFollowerId())
+    public FollowDto follow(Long followeeId, String followerUsername) {
+        Member follower = memberRepository.findByName(followerUsername)
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
 
-        Member following = memberRepository.findById(request.getFollowingId())
+        Member following = memberRepository.findById(followeeId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
 
         if (followRepository.existsByFollowerAndFollowing(follower, following)) {
@@ -48,12 +48,12 @@ public class FollowService {
     }
 
     @Transactional
-    public void unfollow(FollowRequestDto request) {
+    public void unfollow(Long followeeId, String followerUsername) {
 
-        Member follower = memberRepository.findById(request.getFollowerId())
+        Member follower = memberRepository.findByName(followerUsername)
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
 
-        Member following = memberRepository.findById(request.getFollowingId())
+        Member following = memberRepository.findById(followeeId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
 
         Follow follow = followRepository.findByFollowerAndFollowing(follower, following)
@@ -62,13 +62,13 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public FollowPageResponseDto getFollowers(Long memberId, Pageable pageable) {
         Page<Follow> followPage = followRepository.findByFollowerId(memberId, pageable);
         return createFollowPage(followPage);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public FollowPageResponseDto getFollowing(Long memberId, Pageable pageable) {
         Page<Follow> followPage = followRepository.findByFollowingId(memberId, pageable);
         return createFollowPage(followPage);
