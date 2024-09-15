@@ -8,10 +8,17 @@ import com.example.demo.dto.comment.CommentUpdateDto;
 import com.example.demo.dto.diary.DiaryCreatedRequestDto;
 import com.example.demo.dto.diary.DiaryPatchDto;
 import com.example.demo.dto.diary.DiaryResponseDto;
+import com.example.demo.dto.diary.HeartAddRequestDto;
+import com.example.demo.dto.heart.HeartDto;
+import com.example.demo.dto.heart.HeartRequestDto;
 import com.example.demo.entity.Diary;
+import com.example.demo.entity.HeartType;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.DiaryService;
+import com.example.demo.service.HeartService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +39,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
     private final CommentService commentService;
+    private final HeartService heartService;
     private final SortUtils sortUtils;
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -124,5 +132,35 @@ public class DiaryController {
         commentService.deleteComment(diaryId, commentId, userDetails.getUsername());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("{id}/heart")
+    public ResponseEntity<?> toggleHeart(@PathVariable Long id,
+                                     @AuthenticationPrincipal UserDetails userDetails) {
+        HeartRequestDto request = HeartRequestDto.builder()
+                .memberId(Long.parseLong(userDetails.getUsername()))
+                .targetId(id)
+                .heartType(HeartType.Diary)
+                .build();
+
+        HeartDto heart = heartService.toggleHeart(request);
+        if (heart == null) {
+            return ResponseEntity.ok().body(new HeartResponse(false, "Heart removed Successfully"));
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new HeartResponse(true, "Heart added Successfully", heart));
+        }
+    }
+}
+
+@Getter
+@AllArgsConstructor
+class HeartResponse {
+    private boolean isAdded;
+    private String message;
+    private HeartDto heartDto;
+
+    public HeartResponse(boolean isAdded, String message) {
+        this.isAdded = isAdded;
+        this.message = message;
     }
 }

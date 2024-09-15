@@ -3,7 +3,6 @@ package com.example.demo.service;
 import com.example.demo.config.exception.EntityNotFoundException;
 import com.example.demo.dto.follow.FollowDto;
 import com.example.demo.dto.follow.FollowPageResponseDto;
-import com.example.demo.dto.follow.FollowRequestDto;
 import com.example.demo.entity.Follow;
 import com.example.demo.entity.Member;
 import com.example.demo.repository.FollowRepository;
@@ -64,12 +63,16 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public FollowPageResponseDto getFollowers(Long memberId, Pageable pageable) {
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
         Page<Follow> followPage = followRepository.findByFollowerId(memberId, pageable);
         return createFollowPage(followPage);
     }
 
     @Transactional(readOnly = true)
     public FollowPageResponseDto getFollowing(Long memberId, Pageable pageable) {
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다."));
         Page<Follow> followPage = followRepository.findByFollowingId(memberId, pageable);
         return createFollowPage(followPage);
     }
