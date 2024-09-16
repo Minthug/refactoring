@@ -37,7 +37,10 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'com.auth0:java-jwt:4.2.1'
 
-	implementation 'com.google.cloud:google-cloud-storage:2.26.1'
+	// Google Cloud Platform Storage(GCP Storage)
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
+	implementation 'com.google.cloud:google-cloud-storage:2.39.0'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
