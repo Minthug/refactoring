@@ -73,6 +73,7 @@ public class MemberService {
 
             String encryptedPassword = encryptPasswordIfProvided(memberUpdateDto.getPassword());
             ImageS3 updateImage = updateProfileImage(member, memberUpdateDto.getImagesFiles());
+            updateMemberDetails(member, memberUpdateDto, encryptedPassword, updateImage.getUploadFileUrl());
 
             memberRepository.save(member);
             return MemberResponseDto.of(member);

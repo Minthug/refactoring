@@ -1,8 +1,0 @@
-spring:
-  cloud:
-  gcp:
-    storage:
-      credetials:
-        location: ${LOCATION}
-      project-id: ${PROJECT_ID}
-      bucket: ${BUCKET}
