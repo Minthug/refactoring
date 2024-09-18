@@ -8,17 +8,15 @@ import com.example.demo.dto.comment.CommentUpdateDto;
 import com.example.demo.dto.diary.DiaryCreatedRequestDto;
 import com.example.demo.dto.diary.DiaryPatchDto;
 import com.example.demo.dto.diary.DiaryResponseDto;
-import com.example.demo.dto.diary.HeartAddRequestDto;
 import com.example.demo.dto.heart.HeartDto;
 import com.example.demo.dto.heart.HeartRequestDto;
+import com.example.demo.dto.heart.HeartResponse;
 import com.example.demo.entity.Diary;
 import com.example.demo.entity.HeartType;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.DiaryService;
 import com.example.demo.service.HeartService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -149,18 +147,5 @@ public class DiaryController {
         } else {
             return ResponseEntity.status(HttpStatus.CREATED).body(new HeartResponse(true, "Heart added Successfully", heart));
         }
-    }
-}
-
-@Getter
-@AllArgsConstructor
-class HeartResponse {
-    private boolean isAdded;
-    private String message;
-    private HeartDto heartDto;
-
-    public HeartResponse(boolean isAdded, String message) {
-        this.isAdded = isAdded;
-        this.message = message;
     }
 }

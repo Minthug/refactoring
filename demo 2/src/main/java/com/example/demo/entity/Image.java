@@ -40,7 +40,7 @@ public class Image extends BaseTime {
         this.originalName = originalName;
         this.imageUrl = imageUrl;
         this.urlPath = urlPath;
-        this.uniqueName = generateUniqueName(extractExtension(originalName);
+        this.uniqueName = generateUniqueName(extractExtension(originalName));
     }
 
     private final static String[] supportedExtensions = new String[]{"jpg", "jpeg", "png", "gif"};

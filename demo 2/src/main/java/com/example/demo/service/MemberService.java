@@ -96,13 +96,14 @@ public class MemberService {
             }
 
             MultipartFile profileImage = imagesFiles.get(0);
-            ImageS3 uploadImage = gcpStorageService.uploadFile(member.getId(), profileImage);
+            ImageS3 uploadImage = gcpStorageService.uploadProfile(member.getId(), profileImage);
             return uploadImage;
         } catch (Exception e) {
             log.error("Failed to update profile image: {}", e.getMessage());
             throw new RuntimeException("프로필 이미지 업데이트에 실패했습니다.");
         }
     }
+
 
     private boolean deleteExistingImage(String imageUrl) {
         if (imageUrl == null || imageUrl.isEmpty()) {
